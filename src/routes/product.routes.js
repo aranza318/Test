@@ -9,7 +9,7 @@ const productsRouter = Router();
 const PM = new ProductManager();
 const productService = new ProductsServices();
 
-productsRouter.get("/", passportCall('jwt'), authorization(['admin']), productsController.getProducts.bind(productsController));
+productsRouter.get("/", productsController.getProducts.bind(productsController));
 productsRouter.get("/:pid", productsController.getProductById.bind(productsController));
 productsRouter.post('/', passportCall('jwt'), authorization(['admin', 'premium']), productsController.addProduct.bind(productsController));
 productsRouter.put('/:pid',passportCall('jwt'), authorization(['admin']), productsController.updateProduct.bind(productsController));

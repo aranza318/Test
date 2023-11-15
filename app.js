@@ -23,10 +23,24 @@ import cors from "cors";
 import { MONGODB_CNX_STR, PORT, SECRET_SESSIONS} from "./src/config/configs.js"
 import "./src/dao/dbConfig.js"
 import { addLogger, devLogger } from "./src/config/logger.js";
-
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUIExpress from "swagger-ui-express";
 
 const app = express();
 
+const swaggerOptions = {
+  definition:{
+    openapi:"3.0.1",
+    info:{
+      title: "Documentacion Api Okuna",
+      description: "Documentacion para Swagger"
+    }
+  },
+
+  apis: [`./src/docs/**/*.yaml`]
+}
+
+const specs =  swaggerJSDoc(swaggerOptions)
 //Server
 const httpServer = app.listen(PORT, () => {devLogger.info(`conectado a ${PORT}`)})
 export const socketServer = new Server(httpServer);
@@ -49,7 +63,7 @@ app.use(cors({
   method: ["GET", "POST", "PUT", "DELETE"]
 }))
 app.use(cookieParser());
-
+app.use('/apidocs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs));
 app.use(session({
   store: new MongoStore({
       mongoUrl: MONGODB_CNX_STR,
