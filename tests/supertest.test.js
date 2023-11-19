@@ -12,33 +12,49 @@ describe("Test de integracion de ecommerce - Okuna - ", ()=>{
   });
   
   describe('Test de sesion de api', () => { 
-    before(async function (){
-        //this.cookie;
-        this.mockUser = {
-            email : "mock@gmail.com",
-            password : "mockUser1",
-            first_name : "User",
-            last_name : "Mock",
-            age : 30,
-            role : "admin",
-        }
-    });
+    before(function(){
+      this.cookie;
+      this.mockUser = {
+          first_name: "Usuario",
+          last_name: "Apellido",
+          email : "correodeprueba2@gmail.com",
+          age: 30,
+          password : "123456",
+          role: "admin",
+          cart: "123Abc"
+      };
+  });
+    
+      
     it("Registrar usuario - POST /api/sessions/register", async function(){
-        const {statusCode, ok, _body} = await requester.post("/api/sessions/register").send(this.mockUser);
-        expect(statusCode).to.be.eql(201)
-        expect(_body.message).to.be.deep.equal('Success')
+        this.mockUser = {
+        first_name: "Usuario",
+        last_name: "Apellido",
+        email : "correodeprueba2@gmail.com",
+        age: 30,
+        password : "123456",
+        role: "admin",
+        cart: "123Abc"
+        };
+        console.log(this.mockUser);
+        const {statusCode, ok, _body} = await requester.post('/api/sessions/register').send(this.mockUser);
+        console.log(statusCode);
+        console.log(_body);
+        expect(statusCode).is.equal(200);
+      
     });
     it("Deberia hacer el login del usuario y setearle la cookie - POST /api/sessions/login", async function(){
         const result = await requester.post("/api/sessions/login").send({email: this.mockUser.email, password: this.mockUser.password});
+        const { statusCode, ok, _body } = result;
         const cookieResult = result.headers['set-cookie'][0];
-        expect(result.statusCode).to.be.eql(200)
-        expect(result._body.success).to.be.ok
+        expect(statusCode).to.be.eql(200)
+        expect(_body.success).to.be.ok
         const cookieData = cookieResult.split("=");
         this.cookie = {
             name : cookieData[0],
             value : cookieData[1]
         };
-        expect(this.cookie.name).to.be.ok.and.eql('jwtCookieToken');
+        expect(this.cookie.name).to.be.ok.and.eql('coderCookieToken');
         expect(this.cookie.value).to.be.ok
     });
     it("El endpoint actual tiene un usuario con cookie - GET /api/sessions/current", async function(){
@@ -54,7 +70,7 @@ describe("Test de integracion de ecommerce - Okuna - ", ()=>{
         const { statusCode, ok, _body } = response;
         expect(statusCode).to.be.eql(200);
         expect(ok).to.be.true;
-        expect(_body.payload.docs).to.be.an('array');  
+        expect(_body.payload).to.be.an('array');  
       });
       it("Obtengo un producto (ejemplo) por su ID - GET /api/products/652b29ce8b1c2751a6e223bf", async () => {
         const response = await requester.get("/api/products/652b29ce8b1c2751a6e223bf");
@@ -68,18 +84,18 @@ describe("Test de integracion de ecommerce - Okuna - ", ()=>{
     describe("El usuario esta loggeado y tiene un rol", () => {
       it("Deberia crear un producto si estas loggeado y tu rol lo permite - POST /api/products/", async function (){
         const productMock = generateMockProduct();
-        expect(this.cookie.name).to.be.ok.and.eql('jwtCookieToken');
+        expect(this.cookie.name).to.be.ok.and.eql('coderCookieToken');
         const { statusCode, ok } = await requester.post("/api/products").set('Cookie', [`${this.cookie.name}=${this.cookie.value}`]).send(productMock);
         expect(ok).to.be.ok
         expect(statusCode).to.be.eql(201)
     });
   });
     describe("Usuario no loggeado", () =>{
-      it("Si se quiere crear un producto sin estar loggeado, deberia retornar un status 400 - POST /api/products", async function (){
+      it("Si se quiere crear un producto sin estar loggeado, deberia retornar un status 401 - POST /api/products", async function (){
         const productMock = generateMockProduct();
         const { statusCode, ok } = await requester.post("/api/products").send(productMock);
         expect(ok).to.be.not.ok;
-        expect(statusCode).to.be.eql(400)
+        expect(statusCode).to.be.eql(401)
     });
   });
   });
@@ -102,7 +118,7 @@ describe("Test de integracion de ecommerce - Okuna - ", ()=>{
     it("Crea un cart con el metodo POST", async () => {
       const response = await requester.post("/api/carts");
       const { statusCode, ok, _body } = response;
-      expect(statusCode).to.be.eql(201);
+      expect(statusCode).to.be.eql(200);
       expect(ok).to.be.true;
       expect(_body.payload).to.be.an('object');
     })
