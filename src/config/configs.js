@@ -6,7 +6,7 @@ const program = new Command();
 program 
        .option('-d', 'Variable for debug', false)
        .option('-p <port>', 'Server port', 9090)
-       .option('--mode <mode>', 'Option mode', 'development')
+       .option('--mode <mode>', 'Option mode', 'test')
 program.parse();
 
 console.log("Mode Option: ", program.opts().mode);
@@ -16,8 +16,8 @@ const environment = program.opts().mode;
 dotenv.config({
        path:
          environment === "production"
-           ? "./src/config/.env.production"
-           : "./src/config/.env.development",
+           ? "./src/config/.env.production":
+           environment === "test" ? "./src/config/.env.test" : "./src/config/.env.development",
      });
 
 export const PORT = process.env.PORT

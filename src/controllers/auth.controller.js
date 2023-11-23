@@ -41,9 +41,7 @@ class AuthController {
       
     }
 
-    req.logger.info("Full user data object:", userData.user);
-
-    req.logger.info("Assigned session:", req.session); 
+    req.logger.info("Full user data object:", userData.user); 
 
     res.cookie("coderCookieToken", userData.token, {
       httpOnly: true,
@@ -53,7 +51,7 @@ class AuthController {
     return res.status(200).json({ status: "success", user: userData.user, redirect: "/products" });
    } catch (error) {
     req.logger.error("Ocurrio un error: ", error);
-    return res.redirect("/login");
+    return next (error);
    }
     
   }

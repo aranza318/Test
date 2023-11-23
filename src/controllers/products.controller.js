@@ -21,7 +21,7 @@ class ProductController {
         cause:error.message,
       });
       req.logger.error(productErr);
-      res.status(500).send({status:"error", message:"Error al obtener los productos"})
+      res.status(productErr.code).send({status:"error", message:"Error al obtener los productos"})
     }
   }
 
@@ -141,6 +141,7 @@ class ProductController {
         res.send({
           status: "ok",
           message: "El Producto se agregó correctamente!",
+          productId: wasAdded._id,
         });
         socketServer.emit("product_created", {
           _id: wasAdded._id,
@@ -152,6 +153,7 @@ class ProductController {
           stock,
           category,
           thumbnail,
+          owner,
         });
         return;
       } else {

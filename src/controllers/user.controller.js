@@ -17,12 +17,12 @@ class UserController {
       const customeError = new CustomeError({
         name: "User creation error",
         cause: generateUserError({
-          first_name, last_name, email, age, password,
+          first_name, last_name, age, email,  password, role,
         }),
         message: "Error al intentar registrar al usuario",
         code:400,
       });
-      return next(customeError);
+      throw (customeError);
     }
     const response = await this.userService.registerUser({
       first_name,
@@ -33,16 +33,27 @@ class UserController {
       role,
     });
 
-    return res.status(response.status === "success" ? 200 : 400).json({
+    return res.status(200).json({
       status: response.status,
       data: response.user,
       redirect: response.redirect,
     });
     } catch (error) {
-      return next(error);
-    }
-    
+      if (error instanceof CustomeError){
+        return res.status(error.code).json({
+          status: 'error',
+          message: error.message,
+        })
+      } else {
+        console.log(error);
+        return res.status(500).json({
+          status: 'error',
+          message: 'Error interno',
+        })
+      }
+    } 
   }
+  
   async restorePassword(req, res, next) {
     
     try {
