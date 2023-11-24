@@ -1,11 +1,11 @@
-# Swagger
+# SuperTest
 
-Proyecto de backend entrega con swagger
+Proyecto de backend entrega con tests
 
 El proyecto esta compuesto por las siguientes partes:
 Carpeta src, la cual a su vez reune dentro suyo a:
 
-1. Config, que guarda dentro suyo a config.js (donde se aloja dotenv y al environment), a los env de production, default y development, y tambien a logger.js.
+1. Config, que guarda dentro suyo a config.js (donde se aloja dotenv y al environment), a los env de production, default, test y development, y tambien a logger.js.
 2. Controllers, figuran aqui todos los controladores que trabajaran con los servicios (auth, cart, products, user, messages, reseteo de contraseña, sms y ticket).
 3. Dao, gracias a esta gran carpeta podemos ver organizado todo lo siguiente:
 A. Carpeta dtos donde se aloja a los archivos dto.factory, user.dto.js y user.response.js.
@@ -22,9 +22,10 @@ A. Carpeta css la cual contiene los estilos del proyecto.
 B. Carpeta images solo contiene el logo del cliente.
 C. Carpeta js, sostiene dentro de si a login.js y a restore js.
 D. Por ultimo y no en importacia tambien aqui encontraremos a los archivos: cart.js, chat.js, realTimeProducts.js, register.js  y user.js.
-10. Carpeta repository quien agrupa en su interior a los archivos contacts.repository.js e index.js.
+10. Carpeta repository quien agrupa en su interior a los archivos contacts.repository.js, generic.repository e index.js.
 11. Routes, por aqui pasaran todas las rutas para unir a la app con las vistas a los diferentes sectores de la pagina.
 12. Services, quien aloja a todos los servicios que trabajaran con los controladores.
+13. Carpeta test: queda alojada en ella los supertest de admin y de usuario.
 
 Carpeta view donde estan las vistas de la pagina, la cual contiene a layouts(donde encontraremos a main.handlebars) y tambien a las vistas de cart, products, product detail, login, register, restore, profile, chat y real time products
 
